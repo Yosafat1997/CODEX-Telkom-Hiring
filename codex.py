@@ -11,14 +11,16 @@ Original file is located at
 !pip install numpy
 import pandas as pd
 import numpy as np
+from google.colab import drive
 import datetime
 import math
 import time
+drive.mount('/content/gdrive')
 from dateutil.relativedelta import relativedelta
 
 """### 1. Add dataset ###"""
 
-dataset = pd.read_csv("<YOURPATH>/dataset HR analytics.csv")
+dataset = pd.read_csv("/content/gdrive/MyDrive/dataset HR analytics.csv")
 
 dataset
 
@@ -94,7 +96,7 @@ dataset['IsTerminate'] = dataset.apply(lambda row: termination_class(row), axis=
 
 """convert all categorical data to numerical"""
 
-cols = ['MarriedID','MaritalStatusID','GenderID','EmpStatusID','RoleID','LevelID','PerfScoreID','Tribe','Squad','TermReason','EmploymentStatus','RecruitmentSource']
+cols = ['MarriedID','MaritalStatusID','GenderID','EmpStatusID','RoleID','LevelID','PerfScoreID','Tribe','Squad','TermReason','EmploymentStatus','RecruitmentSource','RaceDesc']
 for w in cols:
    dataset[w] = dataset[w].astype("category").cat.codes
 
@@ -116,6 +118,7 @@ selected = dataset[[
  'EmpSatisfaction',
  'SpecialProjectsCount',
  'DaysLateLast30',
+ 'RaceDesc',
  'Absences',
  'Working_Duration',
  'Engagement_Squad_Deviation',
@@ -129,17 +132,18 @@ selected = dataset[[
  'Service_Tribe_Deviation',
  'IsTerminate']]
 
-selected
+class_balanced = selected[['IsTerminate','PerfScoreID']]
 
-"""### 2. The target is EmploymentStatus, the rest is feature ###
+class_balanced.groupby('IsTerminate').count()
 
-### 3. Using sklearn decision tree here. Evaluation done using cross validation method. Stratified k-fold with k = 10 in used since data are pretty big in size ###
-"""
+"""### 3. Using sklearn decision tree here. Evaluation done using cross validation method. Stratified k-fold with k = 10 in used since data are pretty big in size ###"""
 
 !pip install sklearn
+!pip install pingouin
 from sklearn.model_selection import StratifiedKFold
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_validate
+import pingouin as pg
 
 strat_kfold = StratifiedKFold(n_splits=10)
 
