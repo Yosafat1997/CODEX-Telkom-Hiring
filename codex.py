@@ -143,7 +143,6 @@ class_balanced.groupby('IsTerminate').count()
 from sklearn.model_selection import StratifiedKFold
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import cross_validate
-import pingouin as pg
 
 strat_kfold = StratifiedKFold(n_splits=10)
 
