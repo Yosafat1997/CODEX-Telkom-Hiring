@@ -11,16 +11,14 @@ Original file is located at
 !pip install numpy
 import pandas as pd
 import numpy as np
-from google.colab import drive
 import datetime
 import math
 import time
-drive.mount('/content/gdrive')
 from dateutil.relativedelta import relativedelta
 
 """### 1. Add dataset ###"""
 
-dataset = pd.read_csv("/content/gdrive/MyDrive/dataset HR analytics.csv")
+dataset = pd.read_csv("<YOURPATH>/dataset HR analytics.csv")
 
 dataset
 
